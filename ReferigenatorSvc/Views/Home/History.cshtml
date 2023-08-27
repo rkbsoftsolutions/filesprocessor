@@ -1,0 +1,53 @@
+﻿@model ItemlUpsertViewModel
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        
+        <div class="col-12">
+            <div class="form-group">
+                <b>Current Active Item :</b>   @Model.ItemViewModel.ItemName
+            </div>
+            <div class="form-group">
+              <b>Curretn Active Quantity</b>  @Model.ItemViewModel.ItemQuantity
+            </div>
+        </div>
+        <div class="col-12">
+            <a href="@Url.ActionLink("Index","Home")">Back</a>
+        </div>
+
+
+        <div class="col-12">
+
+            @if (Model.currentActiveItems != null && Model.currentActiveItems.Count > 0)
+            {
+                <div class="row">
+                    <div class="col">
+                        Used Date
+                    </div>
+                    <div class="col">
+                        <b> Detail</b>
+                    </div>
+                    
+                </div>
+                @foreach (var activeItem in Model.currentActiveItems)
+                {
+
+                    <div class="row">
+                        <div class="col">
+                            Item consumed @activeItem.UpdateDate.ToString("g")    
+                        </div>
+                        <div class="col">
+                            After used  @activeItem.UpdateItemQuantity active quantity is  @activeItem.ItemQuantity
+                        </div>
+                    </div>
+
+                }
+
+            }
+
+        </div>
+
+</div>

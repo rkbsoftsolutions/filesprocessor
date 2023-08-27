@@ -1,0 +1,122 @@
+﻿@model ItemlUpsertViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script>
+    function selectItem(id) {
+        $.get("/GetItemDetail/"+id, function (data) {
+            if (data) {
+                $("#@nameof(Model.ItemViewModel)_@nameof(Model.ItemViewModel.ItemName)")
+                    .val(data.itemViewModel.itemName).attr('readonly', true).addClass('input-disabled')
+                $("#@nameof(Model.ItemViewModel)_@nameof(Model.ItemViewModel.ItemQuantity)")
+                    .val(data.itemViewModel.itemQuantity).attr("readonly", true).addClass('input-disabled');
+                $("#@nameof(Model.ItemViewModel)_@nameof(Model.ItemViewModel.Id)").val(data.itemViewModel.id);
+                $("#@nameof(Model.ItemViewModel)_@nameof(Model.ItemViewModel.ItemType)")
+                    .val(data.itemViewModel.itemType).prop("disabled", true);;
+                $("#UpdateItemQuantityPanel").show();
+            }
+            else {
+                 $("#UpdateItemQuantityPanel").hide();
+            }
+        })
+    }
+</script>
+<div class="container">
+    <form action="/" method="post">
+        @Html.ValidationSummary()
+        @Html.HiddenFor(x => x.ItemViewModel.Id)
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+
+                    <label>Quantity Type</label>:
+                    <select class="form-control"
+                            asp-for="ItemViewModel.ItemType"
+                            asp-items="Model.storageTypes.Select(x => new SelectListItem { Text = x.Name, Value = x.Code })"></select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.ItemViewModel.ExpirationDate) :
+                    @Html.TextBoxFor(x => x.ItemViewModel.ExpirationDate, "{0:yyyy-MM-ddTHH:mm:ss}", new
+                       {
+                           @class = "form-control",
+                           required = "required",
+                           @type = "datetime-local"
+                       })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.ItemViewModel.ItemName) :
+                    @Html.TextBoxFor(x => x.ItemViewModel.ItemName, new { @class = "form-control", @placeholder = "Enter Item name" })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.ItemViewModel.ItemQuantity) :
+                    @Html.TextBoxFor(x => x.ItemViewModel.ItemQuantity, new { @class = "form-control", @placeholder = "Enter Item Quantity" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-6">
+            <div class="form-group" id="UpdateItemQuantityPanel" style="display:none">
+                @Html.LabelFor(x => x.ItemViewModel.UpdateItemQuantity) :
+                @Html.TextBoxFor(x => x.ItemViewModel.UpdateItemQuantity, new { @class = "form-control", @placeholder = "Enter want to consume" })
+            </div>
+            <div class="form-group">
+                <button id="SubmitDataButton" class="btn btn-primary" type="submit">Submit Data</button>
+            </div>
+        </div>
+   </div>
+            </form>
+   @if (Model.currentActiveItems != null && Model.currentActiveItems.Count > 0)
+               {
+        <div class="container-fluid">
+            <div class="row bg-secondary border text-white">
+                <div class="col">
+                   Consume
+                </div>
+                <div class="col">
+                     Name
+                </div>
+                <div class="col">
+                    Quantity
+                </div>
+                <div class="col">
+                    History
+                </div>
+            </div>
+            @foreach (var activeItem in Model.currentActiveItems)
+               {
+
+                <div class="row bg-transparent border border-primary">
+                    <div class="col">
+                        <input type="radio" class="custom-radio" name="ItemSelect" id="ItemSelect_@activeItem.Id"
+                               onclick="selectItem(@activeItem.Id)" />
+                    </div>
+                    <div class="col">
+                        @activeItem.ItemName
+                    </div>
+                    <div class="col">
+                        @activeItem.ItemQuantity @activeItem.ItemType
+                    </div>
+                    <div class="col">
+                        @Html.ActionLink("History", "History", "Home", new { id = activeItem.Id },new { @class = "btn btn-link" })
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+</div>
+
+@section scripts{
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+}

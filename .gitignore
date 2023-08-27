@@ -7,3 +7,5 @@
 /.vs/FilesProcessorUtility/v16
 /FilesProcessorUtility/bin/Debug/netcoreapp3.1
 /FilesProcessorUtility/obj
+/ReferigenatorSvc/bin/Debug/netcoreapp3.1
+/ReferigenatorSvc/obj

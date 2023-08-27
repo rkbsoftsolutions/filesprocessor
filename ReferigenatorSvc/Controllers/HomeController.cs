@@ -19,10 +19,10 @@ namespace ReferigenatorSvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IReferigenatorService _referigenatorService;
+        private readonly IRefrigenatorService _referigenatorService;
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly List<StorageTypes> _storageTyeps;
-        public HomeController(ILogger<HomeController> logger,IReferigenatorService referigenatorService,
+        public HomeController(ILogger<HomeController> logger,IRefrigenatorService referigenatorService,
             IHubContext<NotificationHub> hubContext,IOptions<List<StorageTypes>> storageTyps)
         {
             _logger = logger;
@@ -33,7 +33,7 @@ namespace ReferigenatorSvc.Controllers
 
         public IActionResult Index()
         {
-            var allActiveItems = _referigenatorService.GetActiveReferigenationItems();
+            var allActiveItems = _referigenatorService.GetActiveRefrigenationItems();
             return View(new ItemlUpsertViewModel { 
                 storageTypes =this._storageTyeps,
                 ItemViewModel = new ItemViewModel(),
@@ -86,14 +86,14 @@ namespace ReferigenatorSvc.Controllers
 
                     itemModel.ItemViewModel.ItemQuantity = itemModel.ItemViewModel.ItemQuantity - itemModel.ItemViewModel.UpdateItemQuantity;
                     var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
-                    await _referigenatorService.UpsertReferigenratorItems(entity);
+                    await _referigenatorService.UpsertRefrigenratorItems(entity);
                     return RedirectToAction("Index");
                 }
                 else
                 {
 
                     var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
-                    await _referigenatorService.AddReferigenationItem(entity).ConfigureAwait(false);
+                    await _referigenatorService.AddRefrigenationItem(entity).ConfigureAwait(false);
                     return RedirectToAction("Index");
                 }
             }
@@ -103,7 +103,7 @@ namespace ReferigenatorSvc.Controllers
 
         public async Task<IActionResult> ExpiredItems()
         {
-            var items =await _referigenatorService.GetExpiredReferigenationItems();
+            var items = await _referigenatorService.GetExpiredRefrigenationItems();
 
 
             //Implement SignalR : If Any Schedular call this end point then send message by with all expired items.
@@ -115,7 +115,7 @@ namespace ReferigenatorSvc.Controllers
                     }).ConfigureAwait(false);
             }
             return Ok();
-                }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

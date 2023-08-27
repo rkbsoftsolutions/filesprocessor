@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesProcessorUtility", "FilesProcessorUtility\FilesProcessorUtility.csproj", "{47AA5B18-8C6D-4564-A568-3921950EE10E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferigenatorSvc", "ReferigenatorSvc\ReferigenatorSvc.csproj", "{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefrigenatorSvc", "ReferigenatorSvc\RefrigenatorSvc.csproj", "{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

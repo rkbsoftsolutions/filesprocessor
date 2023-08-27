@@ -13,16 +13,16 @@ using System.Text;
 
 namespace ReferigenatorSvc.Services
 {
-    public class ReferigenatorService : IReferigenatorService
+    public class RefrigenatorService : IRefrigenatorService
     {
         private readonly List<StorageTypes> _storageTyeps;
         public readonly IUnitOfWork _unitOfWork;
-        public ReferigenatorService(IUnitOfWork unitOfWork, IOptions<List<StorageTypes>> storageTyps)
+        public RefrigenatorService(IUnitOfWork unitOfWork, IOptions<List<StorageTypes>> storageTyps)
         {
             _unitOfWork = unitOfWork;
             _storageTyeps = storageTyps.Value;
         }
-        public async Task<bool> AddReferigenationItem(ItemsEntity itemEntity)
+        public async Task<bool> AddRefrigenationItem(ItemsEntity itemEntity)
         {
             await _unitOfWork.ItemEntityRepo.Add(itemEntity).ConfigureAwait(false);
             var history = itemEntity.Adapt<ItemHistoryEntity>();
@@ -33,7 +33,7 @@ namespace ReferigenatorSvc.Services
         }
 
        
-        public List<ItemViewModel> GetActiveReferigenationItems()
+        public List<ItemViewModel> GetActiveRefrigenationItems()
         {
            
             var currentItems = _unitOfWork.ItemEntityRepo.Find(x => x.IsActive == true && x.ItemQuantity > 0).ToList();
@@ -60,7 +60,7 @@ namespace ReferigenatorSvc.Services
             return ItemUpserViewModel;
         }
 
-        public async Task<bool> UpsertReferigenratorItems(ItemsEntity items)
+        public async Task<bool> UpsertRefrigenratorItems(ItemsEntity items)
         {
             var currentItem = await _unitOfWork.ItemEntityRepo.GetFirstOrDefault(x => x.Id == items.Id).ConfigureAwait(false);
             var history = items.Adapt<ItemHistoryEntity>();
@@ -74,7 +74,7 @@ namespace ReferigenatorSvc.Services
             return true;
         }
 
-        public async Task<List<ItemViewModel>> GetExpiredReferigenationItems()
+        public async Task<List<ItemViewModel>> GetExpiredRefrigenationItems()
         {
            /* SQLLIte Entity framwork not supported Date so used Ado.net core */
 

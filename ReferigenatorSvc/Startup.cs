@@ -46,7 +46,7 @@ namespace ReferigenatorSvc
         //.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
                 });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IReferigenatorService, ReferigenatorService>();
+            services.AddScoped<IRefrigenatorService, RefrigenatorService>();
             services.AddScoped(typeof(TransactionRequiredAttribute));
             services.Configure<List<StorageTypes>>(Configuration.GetSection("StorageTypes"));
         }

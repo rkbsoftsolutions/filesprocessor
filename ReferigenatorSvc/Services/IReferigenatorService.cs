@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ReferigenatorSvc.Services
 {
-    public interface IReferigenatorService
+    public interface IRefrigenatorService
     {
-        public Task<bool> AddReferigenationItem(ItemsEntity itemEntity);
-        public List<ItemViewModel> GetActiveReferigenationItems();
+        public Task<bool> AddRefrigenationItem(ItemsEntity itemEntity);
+        public List<ItemViewModel> GetActiveRefrigenationItems();
 
-        public Task<List<ItemViewModel>> GetExpiredReferigenationItems();
-        public Task<bool> UpsertReferigenratorItems(ItemsEntity items);
+        public Task<List<ItemViewModel>> GetExpiredRefrigenationItems();
+        public Task<bool> UpsertRefrigenratorItems(ItemsEntity items);
         public ItemlUpsertViewModel GetItemAndHistory(int itemId,bool IsIncludeHistory = true);
     }
 }

@@ -1,12 +1,15 @@
    # FilesProcessor Utility
-
     Cosole application for file processing . 
+   # Pattern
+    Factory Pattern
 
-   # Refrigenrator MVC App
-
-   # Datbase : SQL Lite
-   # MVC 
-   # Entity Framework
-   # SignalR
-   # Mapper
-   # Unit or Work Pattern 
+# Refrigenrator App
+    Database : SQL Lite
+    MVC 
+    Entity Framework
+    SignalR
+    Mapster
+  # Pattern
+    Unit of Work 
+    Repository
+    MVC 

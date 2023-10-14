@@ -16,6 +16,11 @@ using ReferigenatorSvc.Hub.NotificationHub;
 using ReferigenatorSvc.Models;
 using ReferigenatorSvc.Services;
 using Microsoft.AspNetCore.SignalR;
+using AuthenticationSvc.Extensions;
+using AuthenticationSvc;
+using Platforms;
+using Platforms.MIddleware;
+
 namespace ReferigenatorSvc
 {
     public class Startup
@@ -30,10 +35,15 @@ namespace ReferigenatorSvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var cs = Configuration.GetValue<string>("ConnectionString");
+            var cs = Configuration.GetValue<string>("ConnectionString:refigendb");
             var dbPath = Path.Combine(Environment.CurrentDirectory, cs);
+            var userdb = Configuration.GetValue<string>("ConnectionString:userdb");
+            var  userDBPath = Path.Combine(Environment.CurrentDirectory, userdb);
             services.AddControllersWithViews();
             services.RegisterMapsterConfiguration();
+            services.AddIdentityStoreManager();
+            services.AddPlatformAuthentication(Configuration);
+            //services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSignalR(hubOptions =>
             {
                 hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
@@ -45,10 +55,18 @@ namespace ReferigenatorSvc
         //        // don't raise the error warning us that the in memory db doesn't support transactions
         //.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
                 });
+
+            services.AddDbContext<UserPlatfromdbContext>(o => o.UseSqlite("Filename = " + userDBPath));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRefrigenatorService, RefrigenatorService>();
             services.AddScoped(typeof(TransactionRequiredAttribute));
             services.Configure<List<StorageTypes>>(Configuration.GetSection("StorageTypes"));
+
+            Task.Run(async () =>
+            {
+                await new SampleData().Initialize(services);
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +84,9 @@ namespace ReferigenatorSvc
             
             app.UseRouting();
 
-            app.UseAuthorization();
-            
+            app.UsePlatformAuthentication();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<NotificationHub>("notify", x =>
@@ -77,7 +96,7 @@ namespace ReferigenatorSvc
                 //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Index}/{id?}");
                 
             });
         }

@@ -23,7 +23,7 @@
     }
 </script>
 <div class="container">
-    <form action="/" method="post">
+    <form asp-action="Index" asp-controller="Home" method="post">
         @Html.ValidationSummary()
         @Html.HiddenFor(x => x.ItemViewModel.Id)
         <div class="row">

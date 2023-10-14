@@ -103,5 +103,12 @@ namespace ReferigenatorSvc.Services
 
             
         }
+
+        public List<ItemViewModel> GetActiveRefrigenationItemsByUserId(Guid guid)
+        {
+            var currentItems = _unitOfWork.ItemEntityRepo.Find(x => x.IsActive == true && x.ItemQuantity > 0 && x.userId==guid).ToList();
+            currentItems.ForEach(x => x.ItemType = _storageTyeps.Single(s => s.Code == x.ItemType).Name);
+            return currentItems.Adapt<List<ItemViewModel>>();
+        }
     }
 }

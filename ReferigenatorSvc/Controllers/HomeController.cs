@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -16,12 +18,15 @@ using ReferigenatorSvc.Services;
 
 namespace ReferigenatorSvc.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IRefrigenatorService _referigenatorService;
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly List<StorageTypes> _storageTyeps;
+        private IServiceProvider services;
+
         public HomeController(ILogger<HomeController> logger,IRefrigenatorService referigenatorService,
             IHubContext<NotificationHub> hubContext,IOptions<List<StorageTypes>> storageTyps)
         {
@@ -31,9 +36,14 @@ namespace ReferigenatorSvc.Controllers
             _storageTyeps = storageTyps.Value;
         }
 
+        private Guid userId => HttpContext.User.Claims.Any(x => x.Type == ClaimTypes.NameIdentifier)
+              ?
+             Guid.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value) :
+             Guid.Empty;
+
         public IActionResult Index()
         {
-            var allActiveItems = _referigenatorService.GetActiveRefrigenationItems();
+            var allActiveItems = _referigenatorService.GetActiveRefrigenationItemsByUserId(userId);
             return View(new ItemlUpsertViewModel { 
                 storageTypes =this._storageTyeps,
                 ItemViewModel = new ItemViewModel(),
@@ -86,6 +96,7 @@ namespace ReferigenatorSvc.Controllers
 
                     itemModel.ItemViewModel.ItemQuantity = itemModel.ItemViewModel.ItemQuantity - itemModel.ItemViewModel.UpdateItemQuantity;
                     var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
+                    
                     await _referigenatorService.UpsertRefrigenratorItems(entity);
                     return RedirectToAction("Index");
                 }
@@ -93,6 +104,7 @@ namespace ReferigenatorSvc.Controllers
                 {
 
                     var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
+                    entity.userId = userId;
                     await _referigenatorService.AddRefrigenationItem(entity).ConfigureAwait(false);
                     return RedirectToAction("Index");
                 }

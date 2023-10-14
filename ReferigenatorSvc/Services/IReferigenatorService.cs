@@ -15,5 +15,7 @@ namespace ReferigenatorSvc.Services
         public Task<List<ItemViewModel>> GetExpiredRefrigenationItems();
         public Task<bool> UpsertRefrigenratorItems(ItemsEntity items);
         public ItemlUpsertViewModel GetItemAndHistory(int itemId,bool IsIncludeHistory = true);
+
+        public List<ItemViewModel> GetActiveRefrigenationItemsByUserId(Guid guid);
     }
 }

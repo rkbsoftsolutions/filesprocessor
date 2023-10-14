@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesProcessorUtility", "Fi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefrigenatorSvc", "ReferigenatorSvc\RefrigenatorSvc.csproj", "{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationSvc", "AuthenticationSvc\AuthenticationSvc.csproj", "{74F5B598-335F-475C-B25C-8D44C0631548}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Platforms\Gateway.csproj", "{88D52657-6766-42DB-B8E0-33954BDB2937}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92123FF3-F1A0-4612-9FE3-16F50D2B5DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F5B598-335F-475C-B25C-8D44C0631548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F5B598-335F-475C-B25C-8D44C0631548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F5B598-335F-475C-B25C-8D44C0631548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F5B598-335F-475C-B25C-8D44C0631548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D52657-6766-42DB-B8E0-33954BDB2937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D52657-6766-42DB-B8E0-33954BDB2937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D52657-6766-42DB-B8E0-33954BDB2937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D52657-6766-42DB-B8E0-33954BDB2937}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

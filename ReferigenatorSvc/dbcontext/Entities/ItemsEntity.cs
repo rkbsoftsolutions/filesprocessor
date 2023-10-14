@@ -19,6 +19,8 @@ namespace ReferigenatorSvc.dbcontext
 
         public string ItemType { get; set; }
 
+        public Guid userId { get; set; }
+
         public DateTimeOffset ExpirationDate { get; set; }
         public ICollection<ItemHistoryEntity> ItemHistoryEntities { get; set; }
 

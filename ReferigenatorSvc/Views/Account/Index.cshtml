@@ -1,0 +1,43 @@
+﻿@model RefrigenatorSvc.Models.AuthenticationModel;
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Login</h2>
+                                <form method="post" action="/">
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        @Html.LabelFor(x => x.Email, "Email address", new { @class = "form-label" }) :
+                                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", required = "required", @type = "email", @placeholder = "Enter Email" })
+                                    </div>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        @Html.LabelFor(x => x.Password, "Password", new { @class = "form-label" }) :
+                                        @Html.TextBoxFor(x => x.Password, new { @class = "form-control", required = "required", @type = "password", @placeholder = "Enter Password" })
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                                    <div class="text-center">
+                                        <p>Not a member? <a asp-controller="Account" asp-action="register">Register</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        @section scripts{
+            <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        }

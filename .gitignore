@@ -10,3 +10,7 @@
 /ReferigenatorSvc/bin/Debug/netcoreapp3.1
 /ReferigenatorSvc/obj
 /.vs/FilesProcessorUtility/config
+/AuthenticationSvc/bin/Debug/netcoreapp3.1
+/AuthenticationSvc/obj
+/Platforms/bin/Debug/netcoreapp3.1
+/Platforms/obj

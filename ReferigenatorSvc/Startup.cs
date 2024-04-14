@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReferigenatorSvc.dbcontext;
 using ReferigenatorSvc.Filters;
 using ReferigenatorSvc.Hub.NotificationHub;
 using ReferigenatorSvc.Models;
-using ReferigenatorSvc.Services;
-using Microsoft.AspNetCore.SignalR;
 using AuthenticationSvc.Extensions;
 using AuthenticationSvc;
 using Platforms;
 using Platforms.MIddleware;
+using Svc.Services;
+using EsearchSvc.Services.Middelwares;
 
 namespace ReferigenatorSvc
 {
@@ -49,16 +47,15 @@ namespace ReferigenatorSvc
                 hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
                 hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(15);
             });
-            services.AddDbContext<AppDbContext>(option =>
-            {
-                option.UseSqlite("Filename = " + dbPath);
-        //        // don't raise the error warning us that the in memory db doesn't support transactions
-        //.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
-                });
-
+            //    services.AddDbContext<UserPlatfromdbContext>(option =>
+            //    {
+            //        option.UseSqlite("Filename = " + dbPath);
+            ////        // don't raise the error warning us that the in memory db doesn't support transactions
+            ////.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            //        });
+            services.AddHttpClient("Context").AddContextAuthenticationHttpHandler();
             services.AddDbContext<UserPlatfromdbContext>(o => o.UseSqlite("Filename = " + userDBPath));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRefrigenatorService, RefrigenatorService>();
+            services.AddScoped<IStoreService, StoreService>();
             services.AddScoped(typeof(TransactionRequiredAttribute));
             services.Configure<List<StorageTypes>>(Configuration.GetSection("StorageTypes"));
 

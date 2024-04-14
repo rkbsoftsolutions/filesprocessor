@@ -8,5 +8,9 @@ namespace AuthenticationSvc.Interface
    public  interface ITokenProcessor
     {
         public JwtSecurityToken GenerateToken(IApplicationUsers user, IList<string> userRoles);
+
+        public string GetToken(IApplicationUsers user, IList<string> userRoles);
+
+        public string GetToken(Guid Id, IList<string> userRoles);
     }
 }

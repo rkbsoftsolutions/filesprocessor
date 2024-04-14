@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Platforms
 {
@@ -31,11 +32,13 @@ namespace Platforms
     {
         public static IServiceCollection AddPlatformAuthentication(this IServiceCollection services, IConfiguration _configuration)
         {
+            
             services.AddAuthentication(options =>
             {
+
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+               // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
                 .AddJwtBearer((c) =>
                 {
@@ -49,22 +52,19 @@ namespace Platforms
                         ValidAudience = _configuration["Jwt:ValidAudience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]))
                     };
-                    //c.Events.on = async context =>
+                    //c.Events = new JwtBearerEvents();
+                    //c.Events.OnTokenValidated = (context) =>
                     //{
-
+                    //    //if (context.HttpContext.User.Identity.IsAuthenticated)
+                    //    //{
+                    //    //    context.HttpContext.User = context.Principal;
+                    //    //    return Task.CompletedTask;
+                    //    //}
+                    //  //  return Task.FromException(new System.Exception());
+                        
                     //};
-                    // c.EventsType = typeof(CustomJwtBearerEvents);
-                    //c.Events.OnTokenValidated = typeof(CustomJwtBearerEvents)
-                });
-
-
-                services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    
-                }).AddCookie(options =>
+                })
+                .AddCookie(options =>
                {
                    options.AccessDeniedPath = new PathString("/Account/Index");
                    options.LoginPath = new PathString("/Account/Index");
@@ -75,6 +75,12 @@ namespace Platforms
                        return Task.CompletedTask;
                    };
                });
+            var multiSchemePolicy = new AuthorizationPolicyBuilder(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    JwtBearerDefaults.AuthenticationScheme)
+  .RequireAuthenticatedUser()
+  .Build();
+            services.AddAuthorization(o => o.DefaultPolicy = multiSchemePolicy);
 
             return services;
         }

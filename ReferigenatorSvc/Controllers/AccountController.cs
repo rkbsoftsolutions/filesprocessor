@@ -53,7 +53,7 @@ namespace RefrigenatorSvc.Controllers
 
                
             }
-            return Unauthorized();
+            return RedirectToAction("Index", "Account");
         }
 
 

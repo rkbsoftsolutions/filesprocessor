@@ -12,9 +12,9 @@ namespace ReferigenatorSvc.dbcontext
 {
 	public class UnitOfWork : IUnitOfWork
 	{
-		private readonly AppDbContext context;
+		private readonly StoreDbContext context;
 		private readonly IDbContextTransaction _transaction;
-		public  UnitOfWork(AppDbContext _context)
+		public  UnitOfWork(StoreDbContext _context)
 		{
 			context = _context;
 			//_transaction = _context.Database.BeginTransaction();

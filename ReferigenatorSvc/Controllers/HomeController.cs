@@ -4,17 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AuthenticationSvc.IdentityClasses;
+using AuthenticationSvc.Interface;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ReferigenatorSvc.dbcontext;
 using ReferigenatorSvc.Filters;
 using ReferigenatorSvc.Hub.NotificationHub;
 using ReferigenatorSvc.Models;
-using ReferigenatorSvc.Services;
+using RefrigenatorSvc.Models;
+using Svc.Services;
 
 namespace ReferigenatorSvc.Controllers
 {
@@ -22,18 +24,21 @@ namespace ReferigenatorSvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IRefrigenatorService _referigenatorService;
+        private readonly IStoreService _referigenatorService;
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly List<StorageTypes> _storageTyeps;
         private IServiceProvider services;
+        private readonly ITokenProcessor _tokenProcessor;
 
-        public HomeController(ILogger<HomeController> logger,IRefrigenatorService referigenatorService,
-            IHubContext<NotificationHub> hubContext,IOptions<List<StorageTypes>> storageTyps)
+        public HomeController(ILogger<HomeController> logger,IStoreService referigenatorService,
+            IHubContext<NotificationHub> hubContext,IOptions<List<StorageTypes>> storageTyps, ITokenProcessor tokenProcessor)
         {
             _logger = logger;
             _referigenatorService = referigenatorService;
             _hubContext = hubContext;
             _storageTyeps = storageTyps.Value;
+            _tokenProcessor = tokenProcessor;
+
         }
 
         private Guid userId => HttpContext.User.Claims.Any(x => x.Type == ClaimTypes.NameIdentifier)
@@ -41,9 +46,10 @@ namespace ReferigenatorSvc.Controllers
              Guid.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value) :
              Guid.Empty;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var allActiveItems = _referigenatorService.GetActiveRefrigenationItemsByUserId(userId);
+            _logger.LogInformation("Function : Index");
+            var allActiveItems = await _referigenatorService.GetActiveRefrigenationItemsByUserId(userId);
             return View(new ItemlUpsertViewModel { 
                 storageTypes =this._storageTyeps,
                 ItemViewModel = new ItemViewModel(),
@@ -51,22 +57,23 @@ namespace ReferigenatorSvc.Controllers
             });
         }
         [Route("History/{id}")]
-        public IActionResult History([FromRoute] int Id)
+        public async Task<IActionResult> History([FromRoute] int Id)
         {
             if (Id > 0)
             {
-                var allActiveItems = _referigenatorService.GetItemAndHistory(Id);
+                var allActiveItems = await _referigenatorService.GetItemAndHistory(Id);
                 return View(allActiveItems);
             }
             return RedirectToAction("Index");
         }
 
         [Route("GetItemDetail/{id}")]
+        [HttpGet]
         public async Task <IActionResult> GetItemDetail([FromRoute] int id)
         {
             if (id > 0)
             {
-                var allActiveItems = _referigenatorService.GetItemAndHistory(id, false);
+                var allActiveItems = await _referigenatorService.GetItemAndHistory(id, false);
 
               
                 return Json(allActiveItems);
@@ -76,7 +83,6 @@ namespace ReferigenatorSvc.Controllers
 
         [HttpPost]
         [ServiceFilterAttribute(typeof(TransactionRequiredAttribute))]
-
         public async Task<IActionResult> Index(ItemlUpsertViewModel itemModel )
         {
             if (ModelState.IsValid)
@@ -95,17 +101,12 @@ namespace ReferigenatorSvc.Controllers
                     }
 
                     itemModel.ItemViewModel.ItemQuantity = itemModel.ItemViewModel.ItemQuantity - itemModel.ItemViewModel.UpdateItemQuantity;
-                    var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
-                    
-                    await _referigenatorService.UpsertRefrigenratorItems(entity);
+                    await _referigenatorService.UpsertRefrigenratorItems(itemModel.ItemViewModel);
                     return RedirectToAction("Index");
                 }
                 else
                 {
-
-                    var entity = itemModel.ItemViewModel.Adapt<ItemsEntity>();
-                    entity.userId = userId;
-                    await _referigenatorService.AddRefrigenationItem(entity).ConfigureAwait(false);
+                    await _referigenatorService.AddItem(userId, itemModel.ItemViewModel).ConfigureAwait(false);
                     return RedirectToAction("Index");
                 }
             }

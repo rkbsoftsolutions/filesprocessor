@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AuthenticationSvc": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

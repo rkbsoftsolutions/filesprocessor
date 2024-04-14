@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AuthenticationSvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using ReferigenatorSvc.dbcontext;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReferigenatorSvc.Filters
@@ -13,8 +11,8 @@ namespace ReferigenatorSvc.Filters
     [AttributeUsage(AttributeTargets.Method)]
     public class TransactionRequiredAttribute : Attribute, IAsyncActionFilter
     {
-        private readonly AppDbContext _dbContext;
-        public TransactionRequiredAttribute(AppDbContext dbContext)
+        private readonly UserPlatfromdbContext _dbContext;
+        public TransactionRequiredAttribute(UserPlatfromdbContext dbContext)
         {
             _dbContext = dbContext;
         }

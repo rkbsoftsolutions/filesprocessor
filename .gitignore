@@ -14,3 +14,8 @@
 /AuthenticationSvc/obj
 /Platforms/bin/Debug/netcoreapp3.1
 /Platforms/obj
+/MarketPlaceSvc/obj
+/rkbmarketplacesvc/bin/Debug/netcoreapp3.1
+/rkbmarketplacesvc/obj
+/Svc.UnitTest/bin/Debug/netcoreapp3.1
+/Svc.UnitTest/obj

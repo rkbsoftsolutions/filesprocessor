@@ -9,10 +9,10 @@ namespace ReferigenatorSvc.dbcontext.Repositories
 {
     public class ItemEntityRepo : Repository<ItemsEntity>, IItemEntityRepo
     {
-        private AppDbContext _context;
+        private StoreDbContext _context;
         public ItemEntityRepo(DbContext context) : base(context)
         {
-            _context = (AppDbContext)context;
+            _context = (StoreDbContext)context;
 
         }
 

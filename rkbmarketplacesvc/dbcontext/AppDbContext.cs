@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ReferigenatorSvc.dbcontext
 {
-    public class AppDbContext : DbContext
+    public class StoreDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
+        public StoreDbContext(DbContextOptions<StoreDbContext> options):base(options)
         {
-            this.Database.EnsureCreated();
+            this.Database?.EnsureCreated();
 
         }
         public DbSet<ItemHistoryEntity> itemHistoryEntities { get; set; }

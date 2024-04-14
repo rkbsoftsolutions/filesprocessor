@@ -55,7 +55,7 @@ namespace Svc.Services
 
         public async Task<bool> UpsertRefrigenratorItems(ItemViewModel itemViewModel)
         {
-            using var hp = new HttpRequestMessage(HttpMethod.Post, new Uri($"{BaseURl}/api/v1/Store"));
+            using var hp = new HttpRequestMessage(HttpMethod.Put, new Uri($"{BaseURl}/api/v1/Store/{itemViewModel.Id}"));
             hp.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(itemViewModel), System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(hp);
             httpResponse.EnsureSuccessStatusCode();

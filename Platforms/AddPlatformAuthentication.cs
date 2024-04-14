@@ -75,13 +75,13 @@ namespace Platforms
                        return Task.CompletedTask;
                    };
                });
-            var multiSchemePolicy = new AuthorizationPolicyBuilder(
-    CookieAuthenticationDefaults.AuthenticationScheme,
-    JwtBearerDefaults.AuthenticationScheme)
-  .RequireAuthenticatedUser()
-  .Build();
-            services.AddAuthorization(o => o.DefaultPolicy = multiSchemePolicy);
-
+           
+            services.AddAuthorization(o => o.DefaultPolicy = 
+            new AuthorizationPolicyBuilder(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                JwtBearerDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser()
+            .Build());
             return services;
         }
   

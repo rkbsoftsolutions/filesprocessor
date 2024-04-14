@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AuthenticationSvc.IdentityClasses;
+using Gateway.Extensions;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,14 +27,12 @@ namespace ReferigenatorSvc.Controllers
             _userManager = userManager;
         }
 
-        private Guid userId => HttpContext.User.Claims.Any(x => x.Type == ClaimTypes.NameIdentifier)
-              ?
-             Guid.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value) :
-             Guid.Empty;
+        
 
-        [HttpGet]
-       public async Task<IActionResult> GetAsync()
+      [HttpGet]
+        public async Task<IActionResult> GetAsync()
         {
+            var userId = HttpContext.UserId();
             var email = User.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.GetUserAsync(HttpContext.User);
             return Ok(new { user, email, userId });

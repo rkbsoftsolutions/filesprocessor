@@ -24,7 +24,7 @@ namespace TestProject1
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IOptions<List<StorageTypes>>> _mockstorageTypes;
         private readonly IRefrigenatorService _refrigenatorService;
-        private readonly Mock<AppDbContext> _mockAppDbContext;
+        private readonly Mock<StoreDbContext> _mockAppDbContext;
 
         public static void miniMaxSum(List<int> arr)
         {

@@ -1,5 +1,6 @@
 ﻿using AuthenticationSvc.IdentityClasses;
 using AuthenticationSvc.Interface;
+using Gateway.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -44,10 +45,6 @@ namespace EsearchSvc.Services.Middelwares
             _httpContextAccessor = httpContextAccessor;
             _tokenProcessor = tokenProcessor;
         }
-        private Guid userId => _httpContextAccessor.HttpContext.User.Claims.Any(x => x.Type == ClaimTypes.NameIdentifier)
-             ?
-            Guid.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value) :
-            Guid.Empty;
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             
@@ -61,7 +58,7 @@ namespace EsearchSvc.Services.Middelwares
             }
             else
             {
-                var token = _tokenProcessor.GetToken(userId, new List<string> { "Admin" });
+                var token = _tokenProcessor.GetToken(_httpContextAccessor.UserId(), new List<string> { "Admin" });
                 request.Headers.TryAddWithoutValidation("Authorization", new string[] { $"Bearer {token.ToString().Trim()}" });
             }
             return base.SendAsync(request, cancellationToken);

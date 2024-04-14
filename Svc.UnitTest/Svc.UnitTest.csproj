@@ -21,7 +21,9 @@
    </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReferigenatorSvc\Svc.csproj" />
+    <ProjectReference Include="..\AuthenticationSvc\AuthenticationSvc.csproj" />
+    <ProjectReference Include="..\Platforms\Gateway.csproj" />
+    <ProjectReference Include="..\rkbmarketplacesvc\rkbmarketplace.csproj" />
   </ItemGroup>
 
 </Project>
